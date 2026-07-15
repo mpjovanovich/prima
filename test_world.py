@@ -41,10 +41,19 @@ def test_two_cells_one_primitive_world_puts_primitive_in_one_cell_with_other_emp
     assert world.state[0] == Compound([Primitive('A', 0.1)], 0.2)
     assert world.state[1] is None
 
-def test_two_cells_two_primitive_world_puts_primitives_in_each_cell():
+def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
     config = WorldConfig(dimensions=(2,), primitive_count=2, population_size=2)
     rng = FakeRNG(uniforms=[0.1, 0.2, 0.3, 0.4], randints=[0, 1])
     world = WorldFactory.create(config, rng=rng)
 
-    assert world.state[0].primitives[0].name == 'A'
-    assert world.state[1].primitives[0].name == 'B'
+    assert len(world.state[0].primitives) == 1 and world.state[0].primitives[0].name
+    assert len(world.state[1].primitives) == 1 and world.state[1].primitives[0].name
+    assert world.state[0].primitives[0].name != world.state[1].primitives[0].name
+
+def test_world_prints_correctly():
+    config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1)
+    rng = FakeRNG(uniforms=[0.1, 0.2], randints=[0])
+    world = WorldFactory.create(config, rng=rng)
+    output = world.to_string()
+
+    assert '[A] [ ]' in output

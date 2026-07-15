@@ -13,6 +13,17 @@ class World:
     ) -> None:
         self.state = state
 
+    def to_string(self) -> str:
+        output = ''
+        for cell in self.state:
+            output += '['
+            if cell is None:
+                output += ' '
+            else:
+                output += cell.primitives[0].name
+            output += '] '
+        return output
+
 # 1. Move          — apply vectors, resolve blocking/overlap (1D: head-on rules)
 # 2. Inter         — adjacent cells, different compounds → bond / merge?
 # 3. Intra         — bonded pairs within each compound → break?
