@@ -33,7 +33,7 @@ class WorldBuilder:
 
         # Creates an empty world with the given dimensions
         state = self._build_empty_grid(self.config.dimensions)
-        world = World(state, primitives)
+        world = World(state=state, primitives=primitives)
 
         if self.config.population_size > 0:
             self._populate_world_with_primitives(world)

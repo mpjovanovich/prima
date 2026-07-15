@@ -10,11 +10,11 @@ class World:
     # The C1 compound has the information about its component primitives.
     def __init__(
         self,
-        state: list[Cell],
         primitives: list[Primitive],
+        state: list[Cell],
     ) -> None:
-        self._state = state
         self._primitives = primitives
+        self._state = state
 
     def get_cell(self, coords: tuple[int, ...]):
         cell = self._state
