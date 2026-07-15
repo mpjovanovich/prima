@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from prima.config.ranges import FloatRange, IntRange
+from prima.objects.ranges import FloatRange, IntRange
 
 # This may need split up later
 @dataclass(frozen=True)

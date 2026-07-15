@@ -1,8 +1,7 @@
 from random import Random
-from prima.config.world_config import WorldConfig
+from prima.objects.world_config import WorldConfig
 from prima.domain.primitive import Primitive
 
-# A proxy for the random generators
 class RandomGenerator:
     def __init__(self, config: WorldConfig, random_number_generator: Random | None = None):
         self._config = config

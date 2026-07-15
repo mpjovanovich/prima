@@ -1,6 +1,6 @@
 from prima.domain import Compound, World
-from prima.config import WorldConfig
-from prima.generation import RandomGenerator, WorldBuilder
+from prima.objects import WorldConfig
+from prima.simulation import RandomGenerator, WorldBuilder
 from tests.conftest import FakeRandomGenerator
 
 NUM_RANDOM_VALUES = 10

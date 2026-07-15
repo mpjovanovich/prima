@@ -3,8 +3,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from prima.config import WorldConfig
-from prima.generation import RandomGenerator, WorldBuilder
+from prima.objects import WorldConfig
+from prima.simulation import RandomGenerator, WorldBuilder
 
 config = WorldConfig(
     dimensions=(50,), 
