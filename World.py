@@ -1,9 +1,6 @@
-import random
-from typing import TypeAlias
 from Compound import Compound
 
 Cell = Compound | None
-Dimensions = tuple[int, ...]
 
 class World:
     # For the state variable, Compound is a reference type, so a compound of
@@ -12,30 +9,9 @@ class World:
     # The C1 compound has the information about its component primitives.
     def __init__(
         self,
-        dimensions: Dimensions,
-        seed: int | None = None,
+        state: list[Cell],
     ) -> None:
-        if seed:
-            random.seed(seed)
-        self.dimensions = dimensions
-        self.state = self.build_empty_grid(self.dimensions)
-
-    def build_empty_grid(self, dimensions: list[int]):
-        if len(dimensions) > 3:
-            raise ValueError("World dimensions cannot be greater than 3")
-
-        if len(dimensions) == 1:
-            return [None] * dimensions[0]
-
-        return [self.build_empty_grid(dimensions[1:]) for _ in range(dimensions[0])]
-
-    # Returns a random coordinate within the grid
-    def get_random_coords(self) -> tuple[int, ...]:
-        return tuple(random.randint(0, d - 1) for d in self.dimensions)
-
-    # def add_primitive_compound_to_random_cell(self, primitive_compound: Compound):
-    #     # Get random coords within the grid
-    #     coords = self.get_random_coords(self.state.dimensions)
+        self.state = state
 
 # 1. Move          — apply vectors, resolve blocking/overlap (1D: head-on rules)
 # 2. Inter         — adjacent cells, different compounds → bond / merge?
