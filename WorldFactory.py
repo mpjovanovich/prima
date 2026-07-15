@@ -1,5 +1,5 @@
-import random
 from math import prod
+from random import Random
 from Compound import Compound
 from Primitive import Primitive
 from WorldConfig import WorldConfig
@@ -12,8 +12,7 @@ DO NOT USE CONSTRUCTORS ANYWHERE! HORRIBLE AWFUL THINGS WILL HAPPEN!
 class WorldFactory:
     @staticmethod
     def create(config: WorldConfig) -> World:
-        if config.seed is not None:
-            random.seed(config.seed)
+        rng = Random(config.seed) if config.seed is not None else Random()
 
         # Primitive count cannot be greater than number of cells in the grid
         num_cells = prod(config.dimensions)
@@ -33,31 +32,26 @@ class WorldFactory:
         world = World(state)
 
         if config.population_size > 0:
-            # Add one of each primitive to the world
-            primitives = WorldFactory._create_primitive_alphabet(config)
-            for primitive in primitives:
-                compound = Compound([primitive])
-                WorldFactory._add_primitive_compound_to_random_cell(world, compound)
-
-            # Populates the world with the remaining population
-            for _ in range(config.population_size - config.primitive_count):
-                primitive = random.choice(primitives)
-                compound = Compound([primitive])
-                WorldFactory._add_primitive_compound_to_random_cell(world, compound)
+            WorldFactory._populate_world_with_primitives(world, config, rng)
 
         return world
 
     # Returns the compound that was added
     @staticmethod
-    def _add_primitive_compound_to_random_cell(world: World, primitive_compound: Compound) -> None:
+    def _add_primitive_compound_to_random_cell(world: World, config: WorldConfig, primitive_compound: Compound, rng: Random) -> None:
         # Get a cell that has None
         while True:
-            coords = WorldFactory._get_random_coords(world.dimensions)
-            if world.state[coords] is None:
+            coords = WorldFactory._get_random_coords(config.dimensions, rng)
+
+            # This will break later when we're not using 1D
+            # temp workaround
+            index = coords[0]
+
+            if world.state[index] is None:
                 break
 
         # Add the compound to the cell
-        world.state[coords] = primitive_compound
+        world.state[index] = primitive_compound
 
     @staticmethod
     def _build_empty_grid(dimensions: tuple[int, ...]) -> list[None]:
@@ -71,28 +65,38 @@ class WorldFactory:
 
     # Creates the primitive alphabet
     @staticmethod
-    def _create_primitive_alphabet(config: WorldConfig) -> list[Primitive]:
+    def _create_primitive_alphabet(config: WorldConfig, rng: Random) -> list[Primitive]:
         primitives = []
         cur_char = 65
         for _ in range(config.primitive_count):
-            primitives.append(Primitive(chr(cur_char), random.uniform(-1, 1)))
+            primitives.append(Primitive(chr(cur_char), WorldFactory._get_random_charge(config, rng)))
             cur_char += 1
+
+        return primitives
+
+    @staticmethod
+    def _get_random_charge(config: WorldConfig, rng: Random) -> float:
+        return rng.uniform(config.charge_range.min, config.charge_range.max)
 
     # Returns a random coordinate within the grid
     @staticmethod
-    def _get_random_coords(dimensions: tuple[int, ...]) -> tuple[int, ...]:
-        return tuple(random.randint(0, d - 1) for d in dimensions)
+    def _get_random_coords(dimensions: tuple[int, ...], rng: Random) -> tuple[int, ...]:
+        return tuple(rng.randint(0, d - 1) for d in dimensions)
 
     @staticmethod
-    def _populate_world_with_primitives(world: World, config: WorldConfig) -> None:
+    def _get_random_vector(config: WorldConfig, rng: Random) -> int:
+        return rng.uniform(config.initial_vector_range.min, config.initial_vector_range.max)
+
+    @staticmethod
+    def _populate_world_with_primitives(world: World, config: WorldConfig, rng: Random) -> None:
         # Add one of each primitive to the world
-        primitives = WorldFactory._create_primitive_alphabet(config)
+        primitives = WorldFactory._create_primitive_alphabet(config, rng)
         for primitive in primitives:
-            compound = Compound([primitive])
-            WorldFactory._add_primitive_compound_to_random_cell(world, compound)
+            compound = Compound([primitive], WorldFactory._get_random_vector(config, rng))
+            WorldFactory._add_primitive_compound_to_random_cell(world, config, compound, rng)
 
         # Populates the world with the remaining population
         for _ in range(config.population_size - config.primitive_count):
-            primitive = random.choice(primitives)
-            compound = Compound([primitive])
-            WorldFactory._add_primitive_compound_to_random_cell(world, compound)
+            primitive = rng.choice(primitives)
+            compound = Compound([primitive], WorldFactory._get_random_vector(config, rng))
+            WorldFactory._add_primitive_compound_to_random_cell(world, config, compound, rng)

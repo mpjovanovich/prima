@@ -7,3 +7,8 @@ class Compound:
         self.primitives = primitives
         # Movement per tick
         self.vector = vector
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Compound):
+            return NotImplemented
+        return self.primitives == other.primitives and self.vector == other.vector

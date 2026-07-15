@@ -1,3 +1,5 @@
+from Compound import Compound
+from Primitive import Primitive
 from World import World
 from WorldConfig import WorldConfig
 from WorldFactory import WorldFactory
@@ -23,3 +25,12 @@ def test_build_empty_grid_2d_correct_contents():
     world = _get_empty_world((2, 3))
     assert all(all(cell is None for cell in row) for row in world.state)
 
+
+def test_single_cell_single_primitive_world_created_correctly():
+    config = WorldConfig(dimensions=(1,), primitive_count=1, population_size=1, seed=1)
+    world = WorldFactory.create(config)
+
+    actual = world.state[0]
+    expected = Compound([Primitive('A', -0.7312715117751976)], 0.6948674738744653)
+
+    assert actual == expected
