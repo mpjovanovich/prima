@@ -15,7 +15,7 @@ class RandomGenerator:
         return tuple(self._random_number_generator.randint(0, d - 1) for d in self._config.dimensions)
 
     def get_random_primitive(self, primitives: list[Primitive]) -> Primitive:
-        return self._random_number_generator._choice(primitives)
+        return self._random_number_generator.choice(primitives)
 
     def get_random_vector(self) -> int:
         return self._random_number_generator.uniform(self._config.initial_vector_range.min, self._config.initial_vector_range.max)

@@ -11,19 +11,19 @@ class World:
     def __init__(
         self,
         state: list[Cell],
-        _primitives: list[Primitive],
+        primitives: list[Primitive],
     ) -> None:
-        self.state = state
-        self._primitives = _primitives
+        self._state = state
+        self._primitives = primitives
 
     def get_cell(self, coords: tuple[int, ...]):
-        cell = self.state
+        cell = self._state
         for c in coords:
             cell = cell[c]
         return cell
 
     def set_cell(self, coords: tuple[int, ...], value: Cell) -> None:
-        cell = self.state
+        cell = self._state
         for c in coords[:-1]:
             cell = cell[c]
         cell[coords[-1]] = value
@@ -31,10 +31,10 @@ class World:
     def to_string(self) -> str:
         output = '[ '
         i = 0
-        while i < len(self.state):
-            cell = self.state[i]
+        while i < len(self._state):
+            cell = self._state[i]
             if cell is None:
-                output += ' '
+                output += '.'
                 i += 1
             else:
                 for j, primitive in enumerate(cell.primitives):
@@ -42,7 +42,7 @@ class World:
                     i += 1
                     if j < len(cell.primitives) - 1:
                         output += '-'
-            if i < len(self.state):
+            if i < len(self._state):
                 output += ' '
         output += ' ]'
         return output

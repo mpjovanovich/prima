@@ -14,20 +14,20 @@ def _get_empty_world(dimensions: tuple[int, ...]) -> World:
 
 def test_build_empty_grid_1d_correct_length():
     world = _get_empty_world((5,))
-    assert len(world.state) == 5
+    assert len(world._state) == 5
 
 def test_build_empty_grid_1d_correct_contents():
     world = _get_empty_world((5,))
-    assert all(cell is None for cell in world.state)
+    assert all(cell is None for cell in world._state)
 
 def test_build_empty_grid_2d_correct_length():
     world = _get_empty_world((2, 3))
-    assert len(world.state) == 2
-    assert all(len(row) == 3 for row in world.state)
+    assert len(world._state) == 2
+    assert all(len(row) == 3 for row in world._state)
 
 def test_build_empty_grid_2d_correct_contents():
     world = _get_empty_world((2, 3))
-    assert all(all(cell is None for cell in row) for row in world.state)
+    assert all(all(cell is None for cell in row) for row in world._state)
 
 def test_single_cell_single_primitive_world_creates_correct_primitive_in_cell():
     config = WorldConfig(dimensions=(1,), primitive_count=1, population_size=1)
@@ -35,7 +35,7 @@ def test_single_cell_single_primitive_world_creates_correct_primitive_in_cell():
     primitive = random_generator.get_random_primitive()
     world = WorldBuilder(config, random_generator).create_world()
 
-    assert world.state[0] == Compound([primitive], random_generator.used_vectors[0])
+    assert world.get_cell((0,)) == Compound([primitive], random_generator.used_vectors[0])
 
 def test_two_cells_one_primitive_world_puts_primitive_in_one_cell_with_other_empty():
     config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1)
@@ -43,8 +43,8 @@ def test_two_cells_one_primitive_world_puts_primitive_in_one_cell_with_other_emp
     primitive = random_generator.get_random_primitive()
     world = WorldBuilder(config, random_generator).create_world()
 
-    assert world.state[0] == Compound([primitive], random_generator.used_vectors[0])
-    assert world.state[1] is None
+    assert world.get_cell((0,)) == Compound([primitive], random_generator.used_vectors[0])
+    assert world.get_cell((1,)) is None
 
 def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
     config = WorldConfig(dimensions=(2,), primitive_count=2, population_size=2)
@@ -52,8 +52,8 @@ def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
     primitives = [random_generator.get_random_primitive(), random_generator.get_random_primitive()]
     world = WorldBuilder(config, random_generator).create_world()
 
-    assert world.state[0] == Compound([primitives[0]], random_generator.used_vectors[0])
-    assert world.state[1] == Compound([primitives[1]], random_generator.used_vectors[1])
+    assert world.get_cell((0,)) == Compound([primitives[0]], random_generator.used_vectors[0])
+    assert world.get_cell((1,)) == Compound([primitives[1]], random_generator.used_vectors[1])
 
 def test_world_prints_correctly():
     config = WorldConfig(dimensions=(2,), primitive_count=2, population_size=2)
