@@ -13,6 +13,18 @@ class World:
     ) -> None:
         self.state = state
 
+    def get_cell(self, coords: tuple[int, ...]):
+        cell = self.state
+        for c in coords:
+            cell = cell[c]
+        return cell
+
+    def set_cell(self, coords: tuple[int, ...], value: Cell) -> None:
+        cell = self.state
+        for c in coords[:-1]:
+            cell = cell[c]
+        cell[coords[-1]] = value
+    
     def to_string(self) -> str:
         output = '[ '
         i = 0

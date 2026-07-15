@@ -1,10 +1,10 @@
-from random import Random
-from PrimitiveAlphabetBuilder import PrimitiveAlphabetBuilder
-from Compound import Compound
-from Primitive import Primitive
-from World import World
-from WorldConfig import WorldConfig
-from WorldFactory import WorldFactory
+# from random import Random
+# from PrimitiveAlphabetBuilder import PrimitiveAlphabetBuilder
+# from Compound import Compound
+# from Primitive import Primitive
+# from World import World
+# from WorldConfig import WorldConfig
+# from WorldFactory import WorldFactory
 
 # rng = Random()
 # config = WorldConfig(

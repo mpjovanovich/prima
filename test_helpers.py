@@ -1,21 +1,44 @@
-class FakeRNG:
-    def __init__(
-        self,
-        uniforms: list[float],
-        randints: list[int],
-        choices: list | None = None,
-    ):
-        self._uniforms = iter(uniforms)
-        self._randints = iter(randints)
-        self._choices = iter(choices) if choices is not None else None
+from Primitive import Primitive
 
-    def uniform(self, a: float, b: float) -> float:
-        return next(self._uniforms)
+class FakeRandomGenerator:
+    def __init__(self, charges: list[float], coords: list[tuple[int, ...]], primitives: list[Primitive], vectors: list[int]):
+        self.charges = iter(charges)
+        self.coords = iter(coords)
+        self.primitives = iter(primitives)
+        self.vectors = iter(vectors)
 
-    def randint(self, a: int, b: int) -> int:
-        return next(self._randints)
+        self.used_charges = []
+        self.used_coords = []
+        self.used_primitives = []
+        self.used_vectors = []
 
-    def choice(self, seq):
-        if self._choices is not None:
-            return next(self._choices)
-        return seq[0]
+    def get_random_charge(self) -> float:
+        charge = next(self.charges)
+        self.used_charges.append(charge)
+        return charge
+
+    def get_random_coords(self) -> tuple[int, ...]:
+        coords = next(self.coords)
+        self.used_coords.append(coords)
+        return coords
+
+    def get_random_primitive(self) -> Primitive:
+        primitive = next(self.primitives)
+        self.used_primitives.append(primitive)
+        return primitive
+
+    def get_random_vector(self) -> int:
+        vector = next(self.vectors)
+        self.used_vectors.append(vector)
+        return vector
+    
+    @staticmethod
+    def Create(num_values: int, dimensions: tuple[int, ...]) -> FakeRandomGenerator:
+        random_generator = FakeRandomGenerator(
+            charges=[i / num_values for i in range(num_values)],
+            coords=[tuple(i % d for d in dimensions) for i in range(num_values)],
+            # A, B, C, ...
+            primitives=[Primitive(chr(65+i), i / num_values) for i in range(num_values)],
+            vectors=[i for i in range(num_values)],
+        )
+        return random_generator
