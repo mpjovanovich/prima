@@ -1,13 +1,16 @@
 from Compound import Compound
 from Primitive import Primitive
+from PrimitiveAlphabetBuilder import PrimitiveAlphabetBuilder
+from Range import Range
 from World import World
 from WorldConfig import WorldConfig
 from WorldFactory import WorldFactory
 from test_helpers import FakeRNG
 
 def _get_empty_world(dimensions: tuple[int, ...]) -> World:
+    alphabet_builder = PrimitiveAlphabetBuilder()
     config = WorldConfig(dimensions=dimensions, primitive_count=0, population_size=0)
-    return WorldFactory.create(config)
+    return WorldFactory.create(config, alphabet_builder)
 
 def test_build_empty_grid_1d_correct_length():
     world = _get_empty_world((5,))
@@ -28,23 +31,26 @@ def test_build_empty_grid_2d_correct_contents():
 
 def test_single_cell_single_primitive_world_creates_correct_primitive_in_cell():
     config = WorldConfig(dimensions=(1,), primitive_count=1, population_size=1)
+    alphabet_builder = PrimitiveAlphabetBuilder()
     rng = FakeRNG(uniforms=[0.1, 0.2], randints=[0])
-    world = WorldFactory.create(config, rng=rng)
+    world = WorldFactory.create(config, alphabet_builder, rng=rng)
 
     assert world.state[0] == Compound([Primitive('A', 0.1)], 0.2)
 
 def test_two_cells_one_primitive_world_puts_primitive_in_one_cell_with_other_empty():
     config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1)
+    alphabet_builder = PrimitiveAlphabetBuilder()
     rng = FakeRNG(uniforms=[0.1, 0.2], randints=[0])
-    world = WorldFactory.create(config, rng=rng)
+    world = WorldFactory.create(config, alphabet_builder, rng=rng)
 
     assert world.state[0] == Compound([Primitive('A', 0.1)], 0.2)
     assert world.state[1] is None
 
 def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
     config = WorldConfig(dimensions=(2,), primitive_count=2, population_size=2)
+    alphabet_builder = PrimitiveAlphabetBuilder()
     rng = FakeRNG(uniforms=[0.1, 0.2, 0.3, 0.4], randints=[0, 1])
-    world = WorldFactory.create(config, rng=rng)
+    world = WorldFactory.create(config, alphabet_builder, rng=rng)
 
     assert len(world.state[0].primitives) == 1 and world.state[0].primitives[0].name
     assert len(world.state[1].primitives) == 1 and world.state[1].primitives[0].name
@@ -52,8 +58,9 @@ def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
 
 def test_world_prints_correctly():
     config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1)
+    alphabet_builder = PrimitiveAlphabetBuilder()
     rng = FakeRNG(uniforms=[0.1, 0.2], randints=[0])
-    world = WorldFactory.create(config, rng=rng)
+    world = WorldFactory.create(config, alphabet_builder, rng=rng)
     output = world.to_string()
 
     assert '[A] [ ]' in output

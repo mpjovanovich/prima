@@ -3,6 +3,7 @@ from random import Random
 from Compound import Compound
 from Primitive import Primitive
 from WorldConfig import WorldConfig
+from PrimitiveAlphabetBuilder import PrimitiveAlphabetBuilder
 from World import World
 
 """
@@ -11,7 +12,7 @@ DO NOT USE CONSTRUCTORS ANYWHERE! HORRIBLE AWFUL THINGS WILL HAPPEN!
 """
 class WorldFactory:
     @staticmethod
-    def create(config: WorldConfig, rng: Random | None = None) -> World:
+    def create(config: WorldConfig, alphabet_builder: PrimitiveAlphabetBuilder, rng: Random | None = None) -> World:
         if rng is None:
             rng = Random()
 
@@ -33,7 +34,7 @@ class WorldFactory:
         world = World(state)
 
         if config.population_size > 0:
-            WorldFactory._populate_world_with_primitives(world, config, rng)
+            WorldFactory._populate_world_with_primitives(world, config, alphabet_builder, rng)
 
         return world
 
@@ -64,17 +65,6 @@ class WorldFactory:
 
         return [WorldFactory._build_empty_grid(dimensions[1:]) for _ in range(dimensions[0])]
 
-    # Creates the primitive alphabet
-    @staticmethod
-    def _create_primitive_alphabet(config: WorldConfig, rng: Random) -> list[Primitive]:
-        primitives = []
-        cur_char = 65
-        for _ in range(config.primitive_count):
-            primitives.append(Primitive(chr(cur_char), WorldFactory._get_random_charge(config, rng)))
-            cur_char += 1
-
-        return primitives
-
     @staticmethod
     def _get_random_charge(config: WorldConfig, rng: Random) -> float:
         return rng.uniform(config.charge_range.min, config.charge_range.max)
@@ -89,9 +79,10 @@ class WorldFactory:
         return rng.uniform(config.initial_vector_range.min, config.initial_vector_range.max)
 
     @staticmethod
-    def _populate_world_with_primitives(world: World, config: WorldConfig, rng: Random) -> None:
+    def _populate_world_with_primitives(world: World, config: WorldConfig, alphabet_builder: PrimitiveAlphabetBuilder, rng: Random) -> None:
         # Add one of each primitive to the world
-        primitives = WorldFactory._create_primitive_alphabet(config, rng)
+        # primitives = WorldFactory._create_primitive_alphabet(config, rng)
+        primitives = alphabet_builder.build_primitives(config.primitive_count, config.charge_range, rng)
         for primitive in primitives:
             compound = Compound([primitive], WorldFactory._get_random_vector(config, rng))
             WorldFactory._add_primitive_compound_to_random_cell(world, config, compound, rng)
