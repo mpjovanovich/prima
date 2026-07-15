@@ -14,9 +14,7 @@ class World:
         self.state = state
 
     def to_string(self) -> str:
-        # TODO: if we're in a compound we need to show the bonds with '-'
         output = '[ '
-        # for i, cell in enumerate(self.state):
         i = 0
         while i < len(self.state):
             cell = self.state[i]
@@ -33,10 +31,7 @@ class World:
                 output += ' '
         output += ' ]'
         return output
-
-        # contents = (cell.primitives[0].name if cell is not None else ' ' for cell in self.state)
-        # return f"[{''.join(contents)}]"
-
+        
 # 1. Move          — apply vectors, resolve blocking/overlap (1D: head-on rules)
 # 2. Inter         — adjacent cells, different compounds → bond / merge?
 # 3. Intra         — bonded pairs within each compound → break?
