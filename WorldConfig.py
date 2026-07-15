@@ -12,4 +12,3 @@ class WorldConfig:
     # ticks: int = 1000
     charge_range: Range = Range(min=-1, max=1)
     initial_vector_range: Range = Range(min=-1, max=1)
-    seed: int | None = None

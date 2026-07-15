@@ -11,8 +11,9 @@ DO NOT USE CONSTRUCTORS ANYWHERE! HORRIBLE AWFUL THINGS WILL HAPPEN!
 """
 class WorldFactory:
     @staticmethod
-    def create(config: WorldConfig) -> World:
-        rng = Random(config.seed) if config.seed is not None else Random()
+    def create(config: WorldConfig, rng: Random | None = None) -> World:
+        if rng is None:
+            rng = Random()
 
         # Primitive count cannot be greater than number of cells in the grid
         num_cells = prod(config.dimensions)
