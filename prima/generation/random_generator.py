@@ -1,6 +1,6 @@
 from random import Random
-from Primitive import Primitive
-from WorldConfig import WorldConfig
+from prima.config.world_config import WorldConfig
+from prima.domain.primitive import Primitive
 
 # A proxy for the random generators
 class RandomGenerator:
@@ -19,4 +19,3 @@ class RandomGenerator:
 
     def get_random_vector(self) -> int:
         return self._random_number_generator.randint(self._config.initial_vector_range.min, self._config.initial_vector_range.max)
-   

@@ -1,10 +1,10 @@
-from random import Random
-from Compound import Compound
-from Primitive import Primitive
-from RandomGenerator import RandomGenerator
-from World import World
-from WorldConfig import WorldConfig
-from WorldBuilder import WorldBuilder
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from prima.config import WorldConfig
+from prima.generation import RandomGenerator, WorldBuilder
 
 config = WorldConfig(
     dimensions=(50,), 
@@ -18,6 +18,7 @@ print(world.to_string())
 
 # ## Make a world directly with constructor in order to test to_string output when there are compounds
 # ## This is a hack to test the print output when there are compounds
+# from prima.domain import Compound, Primitive, World
 # primitives = [Primitive('A', 0.1), Primitive('B', 0.3), Primitive('C', 0.5)]
 # c1 = Compound([Primitive('A', 0.1), Primitive('C', 0.5)], 0.2)
 # c2 = Compound([Primitive('B', 0.3)], 0.4)

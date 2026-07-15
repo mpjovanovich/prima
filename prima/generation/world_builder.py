@@ -1,9 +1,9 @@
 from math import prod
-from Compound import Compound
-from Primitive import Primitive
-from RandomGenerator import RandomGenerator
-from WorldConfig import WorldConfig
-from World import World
+from prima.config.world_config import WorldConfig
+from prima.domain.compound import Compound
+from prima.domain.primitive import Primitive
+from prima.domain.world import World
+from prima.generation.random_generator import RandomGenerator
 
 """
 This is the starting point for all worlds.

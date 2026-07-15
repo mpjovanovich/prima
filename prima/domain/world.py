@@ -1,5 +1,5 @@
-from Compound import Compound
-from Primitive import Primitive
+from prima.domain.compound import Compound
+from prima.domain.primitive import Primitive
 
 Cell = Compound | None
 

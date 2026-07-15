@@ -1,4 +1,4 @@
-from Primitive import Primitive
+from prima.domain.primitive import Primitive
 
 class FakeRandomGenerator:
     def __init__(self, charges: list[float], coords: list[tuple[int, ...]], primitives: list[Primitive], vectors: list[int]):

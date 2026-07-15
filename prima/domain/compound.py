@@ -1,4 +1,4 @@
-from Primitive import Primitive
+from prima.domain.primitive import Primitive
 
 class Compound:
     def __init__(self, primitives: list[Primitive], vector: int):
