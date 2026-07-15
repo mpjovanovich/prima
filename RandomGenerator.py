@@ -18,4 +18,5 @@ class RandomGenerator:
         return self._random_number_generator.choice(primitives)
 
     def get_random_vector(self) -> int:
-        return self._random_number_generator.uniform(self._config.initial_vector_range.min, self._config.initial_vector_range.max)
+        return self._random_number_generator.randint(self._config.initial_vector_range.min, self._config.initial_vector_range.max)
+   

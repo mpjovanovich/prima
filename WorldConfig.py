@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Range import Range
+from IntRange import IntRange
+from FloatRange import FloatRange
 
 # This may need split up later
 @dataclass(frozen=True)
@@ -10,5 +11,5 @@ class WorldConfig:
     # TODO: how many of each type of primitive to add
     # population_skew: float = 0.5
     # ticks: int = 1000
-    charge_range: Range = Range(min=-1, max=1)
-    initial_vector_range: Range = Range(min=-1, max=1)
+    charge_range: FloatRange = FloatRange(min=-1, max=1)
+    initial_vector_range: IntRange = IntRange(min=-1, max=1)

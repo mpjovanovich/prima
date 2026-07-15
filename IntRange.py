@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class Range:
-    min: float
-    max: float
+class IntRange:
+    min: int
+    max: int
 
     def __post_init__(self):
         if self.min > self.max:
