@@ -42,7 +42,7 @@ class WorldFactory:
     def _add_primitive_compound_to_random_cell(world: World, config: WorldConfig, primitive_compound: Compound, rng: Random) -> None:
         # Get a cell that has None
         while True:
-            coords = WorldFactory._get_random_coords(config.dimensions, rng)
+            coords = WorldFactory._get_random_coords(config, rng)
 
             # This will break later when we're not using 1D
             # temp workaround
@@ -81,8 +81,8 @@ class WorldFactory:
 
     # Returns a random coordinate within the grid
     @staticmethod
-    def _get_random_coords(dimensions: tuple[int, ...], rng: Random) -> tuple[int, ...]:
-        return tuple(rng.randint(0, d - 1) for d in dimensions)
+    def _get_random_coords(config: WorldConfig, rng: Random) -> tuple[int, ...]:
+        return tuple(rng.randint(0, d - 1) for d in config.dimensions)
 
     @staticmethod
     def _get_random_vector(config: WorldConfig, rng: Random) -> int:
