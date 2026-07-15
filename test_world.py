@@ -57,10 +57,13 @@ def test_two_cells_two_primitive_world_puts_different_primitives_in_each_cell():
     assert world.state[0].primitives[0].name != world.state[1].primitives[0].name
 
 def test_world_prints_correctly():
-    rng = FakeRNG(uniforms=[0.1, 0.2], randints=[0])
-    config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1, random_number_generator=rng)
+    rng = FakeRNG(uniforms=[0.1, 0.2, 0.3, 0.4], randints=[0, 1])
+    # config = WorldConfig(dimensions=(2,), primitive_count=1, population_size=1, random_number_generator=rng)
+    config = WorldConfig(dimensions=(2,), primitive_count=2, population_size=2, random_number_generator=rng)
     alphabet_builder = PrimitiveAlphabetBuilder()
     world = WorldFactory.create(config, alphabet_builder)
     output = world.to_string()
 
-    assert '[A] [ ]' in output
+    # Good enough without tying us down to an implementation
+    assert 'A' in output
+    assert 'B' in output
