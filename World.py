@@ -16,16 +16,19 @@ class World:
     def to_string(self) -> str:
         # TODO: if we're in a compound we need to show the bonds with '-'
         output = '[ '
-        for i, cell in enumerate(self.state):
+        # for i, cell in enumerate(self.state):
+        i = 0
+        while i < len(self.state):
+            cell = self.state[i]
             if cell is None:
                 output += ' '
                 i += 1
             else:
                 for j, primitive in enumerate(cell.primitives):
                     output += primitive.name
+                    i += 1
                     if j < len(cell.primitives) - 1:
                         output += '-'
-                    i += 1
             if i < len(self.state):
                 output += ' '
         output += ' ]'
