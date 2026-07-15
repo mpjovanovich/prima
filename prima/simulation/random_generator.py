@@ -3,9 +3,9 @@ from prima.objects.world_config import WorldConfig
 from prima.domain.primitive import Primitive
 
 class RandomGenerator:
-    def __init__(self, config: WorldConfig, random_number_generator: Random | None = None):
+    def __init__(self, config: WorldConfig, random_number_generator: Random):
         self._config = config
-        self._random_number_generator = random_number_generator if random_number_generator is not None else Random()
+        self._random_number_generator = random_number_generator
 
     def get_random_charge(self) -> float:
         return self._random_number_generator.uniform(self._config.charge_range.min, self._config.charge_range.max)

@@ -1,13 +1,14 @@
+from random import Random
 from prima.domain import Compound, World
 from prima.objects import WorldConfig
 from prima.simulation import RandomGenerator, WorldBuilder
-from tests.conftest import FakeRandomGenerator
+from tests.test_helpers import FakeRandomGenerator
 
 NUM_RANDOM_VALUES = 10
 
 def _get_empty_world(dimensions: tuple[int, ...]) -> World:
     config = WorldConfig(dimensions=dimensions, primitive_count=0, population_size=0)
-    random_generator = RandomGenerator(config)
+    random_generator = RandomGenerator(config, Random())
     return WorldBuilder(config, random_generator).create_world()
 
 def test_build_empty_grid_1d_correct_length():

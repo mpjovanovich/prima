@@ -12,3 +12,4 @@ class WorldConfig:
     # ticks: int = 1000
     charge_range: FloatRange = FloatRange(min=-1, max=1)
     initial_vector_range: IntRange = IntRange(min=-1, max=1)
+    seed: int | None = None
