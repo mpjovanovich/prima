@@ -1,4 +1,3 @@
-import random
 from dataclasses import dataclass
 
 # Primitive is just a value object
@@ -12,7 +11,3 @@ class Primitive:
             raise ValueError("Charge must be between -1 and 1")
         if not self.name or len(self.name) != 1:
             raise ValueError("Name must be a single character")
-
-    @staticmethod
-    def get_random_charge() -> float:
-        return random.uniform(-1, 1)

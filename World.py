@@ -1,4 +1,5 @@
 from Compound import Compound
+from Primitive import Primitive
 
 Cell = Compound | None
 
@@ -10,8 +11,10 @@ class World:
     def __init__(
         self,
         state: list[Cell],
+        _primitives: list[Primitive],
     ) -> None:
         self.state = state
+        self._primitives = _primitives
 
     def get_cell(self, coords: tuple[int, ...]):
         cell = self.state

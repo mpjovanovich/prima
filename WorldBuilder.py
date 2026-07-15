@@ -10,9 +10,8 @@ This is the starting point for all worlds.
 DO NOT USE CONSTRUCTORS ANYWHERE! HORRIBLE AWFUL THINGS WILL HAPPEN!
 """
 class WorldBuilder:
-    def __init__(self, config: WorldConfig, primitives: list[Primitive], random_generator: RandomGenerator):
+    def __init__(self, config: WorldConfig, random_generator: RandomGenerator):
         self.config = config
-        self.primitives = primitives
         self.random_generator = random_generator
 
     def create_world(self) -> World:
@@ -29,9 +28,13 @@ class WorldBuilder:
                 f"Population size ({self.config.population_size}) cannot be less than primitive count ({self.config.primitive_count})"
             )
 
+        # Create the primitives
+        primitives = self._create_primitives()
+
         # Creates an empty world with the given dimensions
         state = self._build_empty_grid(self.config.dimensions)
-        world = World(state)
+        world = World(state, primitives)
+
         if self.config.population_size > 0:
             self._populate_world_with_primitives(world)
 
@@ -46,6 +49,16 @@ class WorldBuilder:
 
         return [self._build_empty_grid(dimensions[1:]) for _ in range(dimensions[0])]
 
+    def _create_primitives(self) -> list[Primitive]:
+        primitives = []
+        cur_char = 65
+        for _ in range(self.config.primitive_count):
+            charge = self.random_generator.get_random_charge()
+            primitives.append(Primitive(chr(cur_char), charge))
+            cur_char += 1
+
+        return primitives
+
     def _find_empty_cell(self, world: World) -> tuple[int, ...]:
         while True:
             coords = self.random_generator.get_random_coords()
@@ -54,14 +67,14 @@ class WorldBuilder:
 
     def _populate_world_with_primitives(self, world: World) -> None:
         # Add one of each primitive to the world
-        for primitive in self.primitives:
+        for primitive in world._primitives:
             compound = Compound([primitive], self.random_generator.get_random_vector())
             coords = self._find_empty_cell(world)
             world.set_cell(coords, compound)
 
         # Populates the world with the remaining population
         for _ in range(self.config.population_size - self.config.primitive_count):
-            primitive = self.random_generator.get_random_primitive(self.primitives)
+            primitive = self.random_generator.get_random_primitive(world._primitives)
             compound = Compound([primitive], self.random_generator.get_random_vector())
             coords = self._find_empty_cell(world)
             world.set_cell(coords, compound)
